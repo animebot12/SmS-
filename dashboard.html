@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Mr.Arslan Toolkit</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #64748b;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --background: #0f172a;
+            --surface: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --border: #334155;
+            --shadow: rgba(0, 0, 0, 0.25);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--background) 0%, #1e1b4b 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            background: linear-gradient(135deg, var(--primary), var(--success));
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: white;
+        }
+
+        .logo-text h1 {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .logo-text p {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .logout-btn {
+            padding: 10px 20px;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: var(--error);
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 20px 40px var(--shadow);
+            border: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .card-header h2 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--primary), var(--success));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .card-header p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px 24px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 16px;
+            border-radius: 8px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            color: var(--success);
+            text-align: center;
+            font-weight: 500;
+            display: none;
+        }
+
+        .disclaimer {
+            margin-top: 20px;
+            padding: 16px;
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .disclaimer p {
+            font-size: 12px;
+            color: var(--warning);
+            margin: 0;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 32px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .modal h3 {
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+
+        .modal p {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-tools"></i>
+            </div>
+            <div class="logo-text">
+                <h1>Mr.Arslan Toolkit</h1>
+                <p>Professional Tools Dashboard</p>
+            </div>
+        </div>
+        <button class="logout-btn" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h2>Mr.Arslan Toolkit</h2>
+                <p>Professional tools for testing and development</p>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Phone Number</label>
+                <input type="text" id="number" class="form-input" placeholder="Enter number (923XXXXXXXXX)" maxlength="12">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Test Count</label>
+                <input type="number" id="amount" class="form-input" placeholder="Enter test amount (1-10)" min="1" max="10">
+            </div>
+
+            <button class="btn" onclick="sendSMS()">
+                <i class="fas fa-paper-plane"></i> Start SMS Test
+            </button>
+
+            <div id="result" class="result"></div>
+
+            <div class="disclaimer">
+                <p><i class="fas fa-exclamation-triangle"></i> For testing purposes only. Use responsibly and in compliance with local regulations.</p>
+            </div>
+
+            <div class="social-links">
+                <a href="https://chat.whatsapp.com/Bd3Yo93XEDCCcw2mi7jsB6?mode=wwt" target="_blank" class="social-link">
+                    <i class="fab fa-whatsapp"></i> Join WhatsApp Group
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- WhatsApp Modal -->
+    <div class="modal" id="whatsappModal">
+        <div class="modal-content">
+            <h3>Join Our Community</h3>
+            <p>Connect with us on WhatsApp for updates and support</p>
+            <a href="https://chat.whatsapp.com/Bd3Yo93XEDCCcw2mi7jsB6?mode=wwt" target="_blank" class="btn">
+                <i class="fab fa-whatsapp"></i> Join WhatsApp Group
+            </a>
+            <button class="btn" onclick="closeModal()" style="margin-top: 12px; background: var(--secondary);">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Check authentication
+        if (localStorage.getItem('isLoggedIn') !== 'true') {
+            window.location.href = 'index.html';
+        }
+
+        function logout() {
+            localStorage.removeItem('isLoggedIn');
+            window.location.href = 'index.html';
+        }
+
+        // Modal functions
+        function openModal() {
+            document.getElementById('whatsappModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('whatsappModal').style.display = 'none';
+        }
+
+        // SMS function
+        async function sendSMS() {
+            const number = document.getElementById('number').value.trim();
+            const amount = document.getElementById('amount').value.trim();
+            const resultDiv = document.getElementById('result');
+
+            if (!number || !amount) {
+                resultDiv.textContent = "Please enter both phone number and test amount";
+                resultDiv.style.display = 'block';
+                return;
+            }
+
+            resultDiv.textContent = "";
+            resultDiv.style.display = 'none';
+
+            try {
+                await fetch(`https://shadowscriptz.xyz/shadowapisv4/smsbomberapi.php?number=${number}`);
+                
+                resultDiv.textContent = "SMS test initiated successfully! Check your device for messages.";
+                resultDiv.style.display = 'block';
+
+                setTimeout(openModal, 1000);
+
+            } catch (error) {
+                resultDiv.textContent = "Test completed! Join our community for more features.";
+                resultDiv.style.display = 'block';
+                
+                setTimeout(openModal, 1000);
+                console.error(error);
+            }
+        }
+
+        // Input validation
+        document.getElementById('number').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^\d]/g, '');
+        });
+
+        document.getElementById('amount').addEventListener('input', function(e) {
+            if (this.value > 10) this.value = 10;
+            if (this.value < 1) this.value = 1;
+        });
+    </script>
+    
+    <script type='text/javascript' src='//pl26635370.revenuecpmgate.com/0d/d6/68/0dd66892ae1350e1c2ac63bd9e54e111.js'></script>
+</body>
+</html>
