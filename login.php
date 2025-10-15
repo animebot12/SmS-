@@ -5,8 +5,8 @@ header('Access-Control-Allow-Methods: POST');
 header('Access-Control-Allow-Headers: Content-Type');
 
 // Set your username and password here
-$valid_username = "admin";
-$valid_password = "password123";
+$valid_username = "zara";
+$valid_password = "zara123";
 
 // Get POST data
 $input_username = $_POST['username'] ?? '';
