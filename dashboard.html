@@ -388,7 +388,7 @@
 
                 <div class="form-group">
                     <label class="form-label">Test Count</label>
-                    <input type="number" id="amount" class="form-input" placeholder="Enter test amount (1-10)" min="1" max="10">
+                    <input type="number" id="amount" class="form-input" placeholder="Enter test amount (10-100)" min="10" max="100">
                 </div>
 
                 <button class="btn" onclick="sendSMS()" id="smsButton">
@@ -587,8 +587,8 @@ yaad rahe bas Prank karny ke liye Use karna.
         });
 
         document.getElementById('amount').addEventListener('input', function(e) {
-            if (this.value > 10) this.value = 10;
-            if (this.value < 1) this.value = 1;
+            if (this.value > 100) this.value = 100;
+            if (this.value < 10) this.value = 10;
             resetLogoutTimer();
         });
 
