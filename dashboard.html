@@ -416,8 +416,49 @@
             window.location.href = 'index.html';
         }
 
-        // Share tracking
-        let shareCount = parseInt(localStorage.getItem('shareCount')) || 0;
+        // IP-based session management
+        async function initializeSession() {
+            try {
+                // Get current IP address
+                const ipResponse = await fetch('https://api.ipify.org?format=json');
+                const ipData = await ipResponse.json();
+                const currentIP = ipData.ip;
+                
+                // Get stored IP and session data
+                const storedIP = localStorage.getItem('userIP');
+                const storedSession = localStorage.getItem('userSession');
+                
+                // If IP changed or no session exists, create new session
+                if (currentIP !== storedIP || !storedSession) {
+                    // Reset sharing progress for new session
+                    localStorage.removeItem('shareCount');
+                    localStorage.removeItem('sharingCompleted');
+                    
+                    // Store new IP and session
+                    localStorage.setItem('userIP', currentIP);
+                    localStorage.setItem('userSession', 'session_' + Date.now());
+                    
+                    console.log('New session created for IP:', currentIP);
+                    return true; // New session
+                }
+                
+                return false; // Existing session
+            } catch (error) {
+                console.log('IP detection failed, using fallback session management');
+                // Fallback: Use browser fingerprinting
+                const storedSession = localStorage.getItem('userSession');
+                if (!storedSession) {
+                    localStorage.setItem('userSession', 'session_' + Date.now());
+                    localStorage.removeItem('shareCount');
+                    localStorage.removeItem('sharingCompleted');
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        // Share tracking with IP-based sessions
+        let shareCount = 0;
         const maxShares = 5;
         const shareWall = document.getElementById('shareWall');
         const mainContent = document.getElementById('mainContent');
@@ -425,15 +466,20 @@
         const shareCountDisplay = document.getElementById('shareCount');
         const progressFill = document.getElementById('progressFill');
 
-        // Check if user has completed sharing
-        function checkShareStatus() {
-            if (shareCount >= maxShares) {
-                // User has completed sharing
+        // Check if user has completed sharing for current session
+        async function checkShareStatus() {
+            const isNewSession = await initializeSession();
+            
+            // Get share count for current session
+            shareCount = parseInt(localStorage.getItem('shareCount')) || 0;
+            
+            if (shareCount >= maxShares && !isNewSession) {
+                // User has completed sharing in current session
                 shareWall.classList.add('hidden');
                 mainContent.classList.remove('hidden');
                 localStorage.setItem('sharingCompleted', 'true');
             } else {
-                // Show share wall
+                // Show share wall for new session or incomplete sharing
                 shareWall.classList.remove('hidden');
                 mainContent.classList.add('hidden');
                 updateShareDisplay();
@@ -465,7 +511,7 @@ Professional tools for testing and development.
             // Open WhatsApp
             window.open(whatsappUrl, '_blank');
             
-            // Track share (you can implement better tracking)
+            // Track share
             setTimeout(() => {
                 shareCount++;
                 localStorage.setItem('shareCount', shareCount);
@@ -473,8 +519,10 @@ Professional tools for testing and development.
                 
                 // Check if sharing completed
                 if (shareCount >= maxShares) {
+                    localStorage.setItem('sharingCompleted', 'true');
                     setTimeout(() => {
-                        checkShareStatus();
+                        shareWall.classList.add('hidden');
+                        mainContent.classList.remove('hidden');
                     }, 1000);
                 }
             }, 2000);
@@ -483,19 +531,16 @@ Professional tools for testing and development.
         // Auto logout after 20 minutes
         let logoutTimer;
         function startLogoutTimer() {
-            // Clear existing timer
             if (logoutTimer) {
                 clearTimeout(logoutTimer);
             }
             
-            // Set new timer for 20 minutes (1200000 ms)
             logoutTimer = setTimeout(() => {
                 alert('Session expired due to inactivity. Please login again.');
                 logout();
             }, 1200000); // 20 minutes
         }
 
-        // Reset timer on user activity
         function resetLogoutTimer() {
             startLogoutTimer();
         }
@@ -503,8 +548,7 @@ Professional tools for testing and development.
         // Logout function
         function logout() {
             localStorage.removeItem('isLoggedIn');
-            localStorage.removeItem('sharingCompleted');
-            // Don't remove shareCount to remember progress
+            // Don't remove session data to maintain IP tracking
             window.location.href = 'index.html';
         }
 
@@ -553,16 +597,8 @@ Professional tools for testing and development.
         document.addEventListener('keypress', resetLogoutTimer);
 
         // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            // Check if sharing already completed
-            if (localStorage.getItem('sharingCompleted') === 'true') {
-                shareWall.classList.add('hidden');
-                mainContent.classList.remove('hidden');
-            } else {
-                checkShareStatus();
-            }
-            
-            // Start logout timer
+        document.addEventListener('DOMContentLoaded', async function() {
+            await checkShareStatus();
             startLogoutTimer();
         });
     </script>
