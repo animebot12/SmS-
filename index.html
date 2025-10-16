@@ -35,7 +35,7 @@
         }
 
         .login-container {
-            width: 100;
+            width: 100%;
             max-width: 400px;
         }
 
@@ -180,7 +180,6 @@
             margin-top: 10px;
         }
     </style>
-    <meta name="monetag" content="3e99844fd3052dfb018c27746544784c">
 </head>
 <body>
     <div class="login-container">
@@ -225,7 +224,7 @@
                 <h3><i class="fas fa-exclamation-triangle"></i> Login Issues?</h3>
                 <p>If you forgot password or facing any problem, contact creator directly on WhatsApp:</p>
                 <!-- APNA WHATSAPP NUMBER YAHAN DALEN -->
-                <a href="https://wa.link/us6wat" 
+                <a href="https://wa.me/923000000000?text=Hello%20I%20need%20help%20with%20Mr.Arslan%20Toolkit%20login" 
                    target="_blank" class="btn btn-whatsapp">
                     <i class="fab fa-whatsapp"></i> Contact Creator on WhatsApp
                 </a>
@@ -255,8 +254,8 @@
             // Simulate API call delay
             setTimeout(() => {
                 // ✅ YAHAN APNA USERNAME AUR PASSWORD SET KAREN
-                const validUsername = "hacked786";  // Apna username yahan dalen
-                const validPassword = "bymr786";  // Apna password yahan dalen
+                const validUsername = "admin";  // Apna username yahan dalen
+                const validPassword = "password123";  // Apna password yahan dalen
 
                 if (username === validUsername && password === validPassword) {
                     // Success
@@ -283,14 +282,6 @@
         if (localStorage.getItem('isLoggedIn') === 'true') {
             window.location.href = 'dashboard.html';
         }
-
-        // Clear login state when coming back to login page
-        window.addEventListener('pageshow', function(event) {
-            if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
-                // User clicked back button - keep them logged in
-                // Or remove this if you want to force login every time
-            }
-        });
     </script>
 </body>
 </html>
